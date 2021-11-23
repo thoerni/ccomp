@@ -124,6 +124,12 @@ impl Command {
         self
     }
 
+    /// Returns whether the output file 
+    /// should be executed
+    pub fn should_execute(&self) -> bool {
+        self.execute.is_some()
+    }
+
     /// Returns the command that should
     /// compile all given files
     pub fn compile_command(&self) -> String {
@@ -140,9 +146,9 @@ impl Command {
     /// run the executable file
     pub fn execute_command(&self) -> String {
         format!(
-            "{out} {execute}",
+            "./{out} {execute}",
             out = self.out,
-            execute = self.execute.unwrap_or(vec![]).join(" ")
+            execute = self.execute.as_ref().unwrap_or(&vec![]).join(" ")
         )
     }
 
@@ -173,6 +179,17 @@ impl Command {
     /// Executes the compiled file
     /// using the corresponding command
     pub fn execute(&self) {
-        run_script::IoOptions::Pipe
+
+        // Print output directly to stdout instead
+        // of capturing it
+        let mut options = run_script::ScriptOptions::new();
+        options.output_redirection = run_script::IoOptions::Inherit;
+
+        let _process = run_script::run(
+            &self.execute_command(), 
+            &vec![],
+            &options,
+        );
+        
     }
 }

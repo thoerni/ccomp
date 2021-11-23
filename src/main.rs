@@ -18,7 +18,10 @@ fn main() {
     println!("Compiling: {}", command.compile_command());
     command.compile();
     
-    // std::process::Command::
+    if command.should_execute() {
+        println!("Executing: {}", command.execute_command());
+        command.execute()
+    }
 }
 
 

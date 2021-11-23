@@ -36,6 +36,11 @@ pub fn app<'a, 'b>(name: &str, help: &'b Help) -> App<'a, 'b> {
         )
 }
 
+
+// Due to clap only accepting &str, dynamic help messages
+// (for eventually changing variables such as DEFAULT_ARGS)
+// are only possilbe if created seperately and being passed
+// to clap later on (or via third party packages using macros).
 pub struct Help {
     input: String,
     gcc: String,
