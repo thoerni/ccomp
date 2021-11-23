@@ -3,6 +3,8 @@ use crate::command::{Compiler, DEFAULT_ARGS, DEFAULT_OUT};
 
 pub fn app<'a, 'b>(name: &str, help: &'b Help) -> App<'a, 'b> {
     App::new(name)
+        .version("0.1.0")
+        .author("Max Thorn <maxpaul.thorn@gmail.com>")
         .arg(Arg::with_name("INPUT")
             .multiple(true)
             .help(&help.input)
@@ -67,7 +69,7 @@ impl Default for Help {
 
             overwrite: format!("Overwrites the default compiler arguments. \
                 DO NOT USE to overwrite output file name, use the \
-                integrated argument instead. Default is {}", DEFAULT_ARGS)
+                integrated argument instead. Default is '{}'.", DEFAULT_ARGS)
         }
     }
 }

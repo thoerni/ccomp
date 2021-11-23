@@ -9,5 +9,5 @@ pub fn status(message: &str) {
 pub fn error(message: &str) {
     let arrow = "➜".bold().red();
     let message = message.bold();
-    eprintln!("{} {}", arrow, message);
+    eprintln!(" {} {}", arrow, message);
 }
