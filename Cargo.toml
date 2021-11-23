@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]#
 clap = "2.33.3"
 run_script = "0.9.0"
+colored = "2.0.0"
