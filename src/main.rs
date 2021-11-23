@@ -1,5 +1,6 @@
 mod app;
 mod command;
+mod out;
 
 use command::Command;
 use clap::{ArgMatches, Values};
@@ -9,19 +10,27 @@ fn main() {
 
     let help = app::Help::default();
     let matches = app::app("ccomp", &help).get_matches();
-
     let mut command = Command::default();
     set_arguments(&mut command, &matches);
 
-    println!("Matches: {:#?}", matches);
-
-    println!("Compiling: {}", command.compile_command());
+    out::status(&format!(
+        "Compiling: {}", 
+        command.compile_command()
+    ));
     command.compile();
-    
-    if command.should_execute() {
-        println!("Executing: {}", command.execute_command());
-        command.execute()
-    }
+
+    let exit_code = {
+        if command.should_execute() {
+            out::status(&format!(
+                "Executing: {}", 
+                command.execute_command()
+            ));
+            command.execute()
+        } 
+        else { 0 }
+    };
+
+    std::process::exit(exit_code)
 }
 
 
