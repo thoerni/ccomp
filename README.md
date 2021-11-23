@@ -17,5 +17,5 @@ ccomp is just a small wrapper for either gcc or clang. By default, ccomp uses `c
 
 ### Linux Setup
 - [install ccomp](https://github.com/thoerni/ccomp/releases/tag/0.1.0) (`wget https://github.com/thoerni/ccomp/releases/download/0.1.0/ccomp` to download it via the terminal)
-- make sure the file is an executable `chmod +x ccomp`
-- move the installed file into /usr/local/bin/ `mv ccomp /usr/local/bin/`
+- make sure the file is an executable (`chmod +x ccomp`)
+- move the installed file into /usr/local/bin/ so you can call it system-wide (`mv ccomp /usr/local/bin/`)
