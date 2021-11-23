@@ -16,6 +16,6 @@ ccomp is just a small wrapper for either gcc or clang. By default, ccomp uses `c
 - `ccomp file10.c --overwrite="--std=10" --execute=z.txt -o a.out` -> `clang file10.c -o a.out --std=10`, `./a.out z.txt`
 
 ### Linux Setup
-- [install ccomp](https://github.com/thoerni/ccomp/releases/tag/0.1.0)
+- [install ccomp](https://github.com/thoerni/ccomp/releases/tag/0.1.0) (`wget https://github.com/thoerni/ccomp/releases/download/0.1.0/ccomp` to download it via the terminal)
 - make sure the file is an executable `chmod +x ccomp`
 - move the installed file into /usr/local/bin/ `mv ccomp /usr/local/bin/`
