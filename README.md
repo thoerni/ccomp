@@ -4,7 +4,7 @@ ccomp searches through your current working directory and automatically compiles
 and optionally runs the executable afterwards.
 
 ### Usage
-ccomp is just a small wrapper for either gcc or clang. By default, ccomp uses `clang`, uses the arguments `--std=11 -Wall` and outputs to `c.out`.
+ccomp is just a small wrapper for either gcc or clang. By default, ccomp uses `clang`, uses the arguments `--std=c11 -Wall` and outputs to `c.out`.
 - `--gcc` Changes the used compiler to gcc.
 - `--out <file>` / `-o <file>` Changes the output file name.
 - `--execute` / `--execute=arg1,arg2` / `--execute="arg1 arg2"` Runs the output file after compilation with the given arguments.
