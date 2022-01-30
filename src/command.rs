@@ -2,7 +2,7 @@ use run_script;
 use crate::out;
 
 pub const DEFAULT_OUT: &str = "c.out";
-pub const DEFAULT_ARGS: &str = "--std=c11 -Wall";
+pub const DEFAULT_ARGS: &str = "--std=c11 -Wall -Werror -g";
 
 /// Returns all filenames in the current working
 /// directory ending with '.c'.
@@ -66,6 +66,7 @@ pub struct Command {
     out: String,
     compiler: Compiler,
     execute: Option<Vec<String>>,
+    valgrind: Option<Vec<String>>,
     files: Vec<String>,
     compiler_args: Vec<String>,
 }
@@ -76,6 +77,7 @@ impl Default for Command {
             out: DEFAULT_OUT.to_owned(),
             compiler: Compiler::default(),
             execute: None,
+            valgrind: None,
             files: get_c_files(),
             compiler_args: vec![DEFAULT_ARGS.to_owned()]
         }
@@ -124,10 +126,25 @@ impl Command {
         self
     }
 
+    pub fn set_valgrind(
+        &mut self,
+        valgrind_args: Option<Vec<String>>
+    ) -> &mut Self {
+        self.valgrind = valgrind_args;
+        self
+    }
+
+
     /// Returns whether the output file 
     /// should be executed
     pub fn should_execute(&self) -> bool {
-        self.execute.is_some()
+        self.execute.is_some() && !self.use_valgrind()
+    }
+
+    /// Returns whether valgrind should be used 
+    /// after compilation
+    pub fn use_valgrind(&self) -> bool {
+        self.valgrind.is_some()
     }
 
     /// Returns the command that should
@@ -149,6 +166,17 @@ impl Command {
             "./{out} {execute}",
             out = self.out,
             execute = self.execute.as_ref().unwrap_or(&vec![]).join(" ")
+        )
+    }
+
+    /// Returns the command that should
+    /// run valgrind
+    pub fn execute_with_valgrind(&self) -> String {
+        format!(
+            "valgrind {valgrind_args} ./{out} {compiler_args}",
+            out = self.out,
+            valgrind_args = self.valgrind.as_ref().unwrap_or(&vec![]).join(" "),
+            compiler_args = self.execute.as_ref().unwrap_or(&vec![]).join(" ")
         )
     }
 
@@ -182,7 +210,7 @@ impl Command {
 
     /// Executes the compiled file
     /// using the corresponding command
-    pub fn execute(&self) -> i32 {
+    pub fn execute(&self, command: String) -> i32 {
 
         // Print output directly to stdout instead
         // of capturing it
@@ -190,7 +218,7 @@ impl Command {
         options.output_redirection = run_script::IoOptions::Inherit;
 
         let process = run_script::run(
-            &self.execute_command(), 
+            &command,
             &vec![],
             &options,
         );

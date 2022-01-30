@@ -25,8 +25,17 @@ fn main() {
                 "Executing: {}", 
                 command.execute_command()
             ));
-            command.execute()
-        } 
+            command.execute(command.execute_command())
+        }
+
+        else if command.use_valgrind() {
+            out::status(&format!(
+                "Executing: {}", 
+                command.execute_with_valgrind()
+            ));
+            command.execute(command.execute_with_valgrind())
+        }
+    
         else { 0 }
     };
 
@@ -58,8 +67,12 @@ fn set_arguments(command: &mut Command, matches: &ArgMatches) {
         command.set_files(values_to_vec(input_files));
     }
 
-    if let Some(compiler_args) = matches.values_of("overwrite") {
+    if let Some(compiler_args) = matches.values_of("args") {
         command.set_compiler_args(values_to_vec(compiler_args));
+    }
+
+    if let Some(valgrind_args) = matches.values_of("valgrind") {
+        command.set_valgrind(Some(values_to_vec(valgrind_args)));
     }
 
 }
