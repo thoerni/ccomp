@@ -4,18 +4,40 @@ ccomp searches through your current working directory and automatically compiles
 and optionally runs the executable afterwards.
 
 ### Usage
-ccomp is just a small wrapper for either gcc or clang. By default, ccomp uses `clang`, uses the arguments `--std=c11 -Wall -Werror -g` and outputs to `c.out`.
-- `--gcc` Changes the used compiler to gcc.
-- `--out <file>` / `-o <file>` Changes the output file name.
-- `--execute <args>`, `-x <args>` Runs the output file after compilation with the given arguments.
-- `--overwrite <compiler args>`, `-w <compiler args>` Removes or overwrites the default arguments.
-- `--valgrind <valgrind args>`, `-v <valgrind args>` Uses valgrind to execute the binary.
-- `-- <files>` Files to compile.
+```
+USAGE:
+    ccomp [FLAGS] [OPTIONS] [INPUT]...
 
+FLAGS:
+        --gcc        Changes the C compiler used to gcc. clang is used by default.
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -a, --args <args>            Overwrites the default compiler arguments. DO NOT USE to overwrite output file name,
+                                 use the integrated argument instead. Default is '--std=c11 -Wall -Werror -g'.
+    -x, --execute <with args>    Runs the executable after compiling with all given arguments.
+    -o, --out <file>             Changes the name of the output file. Default is c.out.
+    -v, --valgrind <valgrind>    Specifies whether the code should be executed using Valgrind. If this flag is enabled,
+                                 the execute flag won't execute, but its arguments will be used for Valgrind.
+
+ARGS:
+    <INPUT>...    Sets the files to be compiled. If no file is specified, all files ending with '.c' will be
+                  compiled.
+```
+      
 ### Examples
-- `ccomp` -> `clang file1.c file2.c <...> -o c.out --std=c11 -Wall -Werror -g`
-- `ccomp --gcc --overwrite` -> `gcc file1.c file2.c <...> -o c.out`
-- `ccomp file10.c -w="--std=c17" -x z.txt -o a.out -v` -> `clang file10.c -o a.out --std=c17`, `valgrind ./a.out z.txt`
+```
+~$ ccomp
+-> Compiling: clang file1.c file2.c <...> -o c.out --std=c11 -Wall -Werror -g
+
+~$ ccomp --gcc -a
+-> Compiling: gcc file1.c file2.c <...> -o c.out
+
+~$ ccomp afile.c -w="--std=c17" -x z.txt -o a.out -v
+-> Compiling: clang afile.c -o a.out --std=c17
+-> Executing: valgrind ./a.out z.txt
+```
 
 ### Linux Setup
 - [install ccomp](https://github.com/thoerni/ccomp/releases/tag/0.1.1) (`wget https://github.com/thoerni/ccomp/releases/download/0.1.1/ccomp` to download it via the terminal)
